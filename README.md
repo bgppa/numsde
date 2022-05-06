@@ -1,2 +1,2 @@
 # numsde
-Exercises aiming at the understanding of numerical methods for Stochastic Differential Equations
+Exercises for better understanding the numerical methods for Stochastic Differential Equations.
