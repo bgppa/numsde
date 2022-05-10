@@ -5,6 +5,7 @@ random number generation and related statistical tests.
 
 import numpy as np
 import time
+import matplotlib.pyplot as plt
 
 
 def lcg(between_zero_one, x_seed, param_a, param_b, param_c):
@@ -83,52 +84,56 @@ def f_find_period (random_generator):
 #---
 
 
-def stat_analysis(random_generator, n_samples = 100_000):
+def stat_analysis(random_generator, n_samples = 100_000, bins = 50):
     """
     Simple statistical analysis of a uniform random generator.
     More checks will be added in the future.
     """
-    samples = []
+    samples = np.zeros(n_samples)
     for tmp in range(n_samples):
-        samples.append(random_generator())
+        samples[tmp] = random_generator()
 
-    mean = 0.
-    for tmp in range(n_samples):
-        mean += samples[tmp]
-    mean /= n_samples
-
-    var = 0.
-    for tmp in range(n_samples):
-        var += (samples[tmp] - mean) ** 2
-    var /= (n_samples - 1)
-
-    print(f"Mean: {mean:.4f}, compare to {1. / 2: .4f}")
-    print(f"Variance: {var:.4f}, compare to {1. / 12 : .4f}")
+    mean = np.mean(samples)
+    var = np.std(samples) ** 2
+    print(f"Mean:\t\t\t\t{mean:.3f}\t[compare to {1. / 2: .3f}]")
+    print(f"Variance:\t\t\t{var:.3f}\t[compare to {1. / 12 : .3f}]")
 
     # An easy histogram analysis
-    step_size = 0.01
-    frequencies = [0] * 101
-    for number in samples:
-        for N in range(100):
-            if ((N * 0.01) < number) and (number < (N+1) * 0.01):
-                hist_index = N
+    step_size = 1. / bins
+    frequencies = np.zeros(bins)
+
+    # For each number sampled, find the interval to which it belongs
+    for num in samples:
+        for nth_bin in range(bins):
+            if nth_bin * step_size <= num and num <= (nth_bin+1) * step_size:
+                hist_index = nth_bin
         frequencies[hist_index] += 1
 
-    for tmp in range(101):
-        frequencies[tmp] = frequencies[tmp] / n_samples * 100
+    # Print the frequencies in a percentage format
+    print("-"*13 + " Histogram " + "-" * 12)
+    frequencies = frequencies / n_samples * 100.
+    for tmp in range(bins):
+        print(f"bin({tmp + 1})\t[{tmp*step_size:.2f},{(tmp+1)*step_size:.2f}]"
+                f"\t:\t{frequencies[tmp]:.2f}") 
+    print("-"*36)
 
-    print(f"Frequencies: {frequencies}") 
+
     return 0
 #---
 
 
-
 if __name__ == '__main__':
-#    gen = lcg(False, 0, 1229, 1, 2048)
+    gen = lcg(True, 0, 1229, 1, 2048)
 #    f_find_period(gen)
 #    numpy_gen = np.random.randint(2**32)
-#    gen2 = lagged_fibonacci()
+    gen2 = lagged_fibonacci(True)
 #    print(f"Expected period: {(2 ** 17 -1) * 2 ** 31}")
 #    f_find_period(gen2)
     
+#    stat_analysis(np.random.uniform)
+    print("Analysis of the LGC")
+    stat_analysis(gen)
+    print("Analysis of Fibonacci")
+    stat_analysis(gen2)
+    print("Analysis of Numpy")
     stat_analysis(np.random.uniform)
