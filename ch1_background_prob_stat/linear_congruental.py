@@ -86,7 +86,7 @@ def f_find_period (random_generator):
 
 def stat_analysis(random_generator, n_samples = 100_000, bins = 50):
     """
-    Simple statistical analysis of a uniform random generator.
+    Simple histogram analysis of a uniform random generator.
     More checks will be added in the future.
     """
     samples = np.zeros(n_samples)
@@ -122,6 +122,71 @@ def stat_analysis(random_generator, n_samples = 100_000, bins = 50):
 #---
 
 
+def test_independence(rng_generator, n_samples = 1000):
+    '''
+    A simple check for the independence of the numbers x+n and x_n+1
+    '''
+    samples_x = [rng_generator() for i in range(n_samples)]
+    samples_y = samples_x[1:] + [rng_generator()]
+
+    samples_x = np.asarray(samples_x)
+    samples_y = np.asarray(samples_y)
+    print(f"{samples_x.shape}, {samples_y.shape}")
+    samples_z = samples_x * samples_y
+    mu_z = np.mean(samples_z)
+    mu_xy = np.mean(samples_x) * np.mean(samples_y)
+    print(f"E[XY] = {mu_z:.3f}\nE[X]E[Y] = {mu_xy:.3f}") 
+
+    plt.scatter(samples_x, samples_y)
+    plt.grid()
+    plt.title("Looking for a regular structure")
+    plt.show()
+
+    return 0
+#---
+
+
+def chisq_test_uniform(rng_generator, start = 0., end = 1., n_samples = 10_000):
+    '''
+    A chiSquare method to test the hypothesis: the distribution is uniform
+    '''
+    # Choose k + 1 = 31 bins. The Parson statistics asymptotically distributes
+    # as a chi_square with parameter k. For k = 30 I have the tabular
+    # value for a correct confidence interval interpretation.
+    n_bins = 31
+    samples = np.asarray([rng_generator() for i in range(n_samples)])
+
+    # Compute the frequences in every bin
+    freqs = np.zeros(n_bins)
+    intervals = np.linspace(start, end, n_bins + 1)
+    freq_expected = 1. / n_bins
+    for num in samples:
+        # Find the right interval
+        for idx in range(n_bins):
+            if intervals[idx] <= num and num <= intervals[idx + 1]:
+                freqs[idx] += 1
+                break
+    print(freqs)
+    #Check thet their sum equals the samples:
+    print(f"Frequencies sum: {np.sum(freqs):.3f}, samples = {n_samples}")
+
+    # Compute the Parson statistics
+    chisq = 0.
+    for ith in range(n_bins):
+        Np_hat = n_samples * freq_expected
+        chisq += (freqs[ith] - Np_hat) ** 2 / Np_hat
+
+    print(f"Chi2 error: {chisq:.2f}")
+    # Values for the 95% confidence interval for the chi2 dist. k=30
+    if chisq < 43.773:
+        print("Test PASSED")
+        return 1
+    else:
+        print("Test NOT PASSED")
+        return 0
+#---
+
+# Here add the functionalities you want to run as a main program
 if __name__ == '__main__':
     gen = lcg(True, 0, 1229, 1, 2048)
 #    f_find_period(gen)
@@ -131,9 +196,23 @@ if __name__ == '__main__':
 #    f_find_period(gen2)
     
 #    stat_analysis(np.random.uniform)
-    print("Analysis of the LGC")
-    stat_analysis(gen)
-    print("Analysis of Fibonacci")
-    stat_analysis(gen2)
-    print("Analysis of Numpy")
-    stat_analysis(np.random.uniform)
+
+#    print("Analysis of the LGC")
+#    stat_analysis(gen)
+#    print("Analysis of Fibonacci")
+#    stat_analysis(gen2)
+#    print("Analysis of Numpy")
+#    stat_analysis(np.random.uniform)
+
+#    print("Testing independence of lgc")
+#    test_independence(gen)
+
+#    print("Testing indepencence of Fibonacci")
+#    test_independence(gen2)
+
+#    print("Testing independence of Numpygen")
+   # test_independence(np.random.uniform)
+
+    chisq_test_uniform(gen, 0, 1, 100_000)
+    chisq_test_uniform(gen2, 0, 1, 100_000)
+    chisq_test_uniform(np.random.uniform, 0, 1, 100_000)
