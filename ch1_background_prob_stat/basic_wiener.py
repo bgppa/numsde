@@ -37,7 +37,7 @@ def rw(n_steps = 10):
     '''
     # The various variables +-1 for the random walk, starting from 0
     rw_samples=[1 if np.random.uniform()>0.5 else -1 for n in range(n_steps-1)]
-    rw_samples = np.asarray([0] + rw_samples)
+    rw_samples = np.asarray(rw_samples)
 #    print(rw_samples)
 
     # Wiener process variable and time step
