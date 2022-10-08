@@ -1,0 +1,19 @@
+A real number in a machine is said to be accuracy s if:
+y = y_true + err
+where:
+    y_true is the target valur guaranteed to be faithful until digit s,
+        i.e. ntil 10 ^ -s
+    err is modeled as a uniform random variable in [-5 * 10-(s+1), 5*10-(s+1)]
+        err is not actually uniform, but it's a good approximation.
+        in reality are noise bits depending on the processor.
+        You can test on your pc focing e.g. roundoff to 4 digits, then
+        comparing the distributions of the remaining one.
+
+When doing massive SUMS with N terms, e.g. when simulating ODE, with N steps,
+you obtain the Cumulative Roundoff Error as the sums of the err above.
+Being sums of iid, they can be modeled as a Gaussian with mean 0 and variance
+    (b-a)^2/12, etc.., expecting the roundoff error in the range of
+    [-1.96 * 10^-s sqrt(N/12), +1.96 * 10^-s sqrt(N/12)] (confidence interval)
+
+Since on MODERN pc s is usually something like 8 or 16, in the practice we
+should be pretty safe. But it's nice to keep that in mind.

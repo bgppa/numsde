@@ -1,0 +1,15 @@
+Basically y_n+1 = y_n + h * a(t+n, y_n)
+is the standard Euler.
+The asymptotic rate of final error of x_true - y_approx at time T
+gives the global error bound; of order 1 with Euler and related to
+how much we expand Taylor in derivative.
+
+Further Taylor expansions are not to nice since involves knowing derivatives
+of a; but you can approximate them and obtain RK method/similars.
+
+If y_n+1 depends not only on y_n, but also on y_n-1, etc...,
+you have a MULTISTEP method. You can mix stuff.
+
+
+Anyway the Euler method is very nice since can be peacefully extended to the
+SDE case.

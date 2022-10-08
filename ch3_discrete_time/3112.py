@@ -13,6 +13,8 @@ We repeat an Euler ODE simulation L times, each time:
  - its mean and variance (empirical)
 observing that the actual CRE value oscillates a little bit but it stays
 always with basically the same mean and variance predicted from the theory.
+
+Each experiment is repeated again by choosing a different value of N.
 '''
 import numpy as np
 import matplotlib.pyplot as plt
@@ -32,8 +34,8 @@ def x_sol(t):
     return np.exp(t)
 
 # Number of total simulations
-L = 10 ** 3
-powerN = 13
+L = 200
+powerN = 3
 
 
 N = pow(2, powerN)
@@ -47,6 +49,8 @@ nth_means = np.zeros(L)
 nth_predicted_var = np.ones(L)
 predvar = pow(10, -ROUNDOFF) * np.sqrt(N / 12.)
 nth_predicted_var *= predvar
+nth_positive_ci = 1.96 * nth_predicted_var
+nth_negative_ci = -nth_positive_ci
 
 for nth_simulation in range(L):
     round_errors = np.zeros(N)
@@ -73,8 +77,10 @@ for nth_simulation in range(L):
 plt.plot(nth_attempt, nth_error, label = 'CRE')
 plt.plot(nth_attempt, nth_var, label = 'CRE variance')
 plt.plot(nth_attempt, nth_means, label = 'CRE mean')
-plt.plot(nth_attempt, nth_predicted_var, label = 'CRE predicted variance')
-plt.title("Comulative Roundoff Errors distributions over repeated simulations")
+plt.plot(nth_attempt, nth_predicted_var, label = 'CRE predicted var')
+plt.plot(nth_attempt, nth_positive_ci, label = 'CRE predicted ci-')
+plt.plot(nth_attempt, nth_negative_ci, label = 'CRE predicted ci-')
+plt.title("Comulative Roundoff Errors distr,repeated simulations, N="+str(N))
 plt.xlabel("nth-simulation")
 plt.legend()
 plt.grid()
