@@ -1,0 +1,20 @@
+Euler:
+basically like the ODE case, but at each step we add the Gaussian noise
+Now we have probabilistic paths. Therefore different at each run.
+
+STRONG CONVERGENCE
+A form of computing error is wrt expected pathwise error, where we fix a
+time and compute:
+E|X_true - X_approximated|
+if this quantity is bounded by C h^p, i.e. we have:
+
+E|X_true - X_approx| <= C h^p
+
+then we have order p.
+Euler has now (strong) order 1/2 (cf with ODE case where it has order 1).
+Since it does not perform so well, further numerical methods are justified.
+
+
+WEAK CONVERGENCE
+
+
