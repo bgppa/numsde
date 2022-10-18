@@ -1,0 +1,2 @@
+Write a little better the weak error comments and the main code,
+then move to stability issues.
