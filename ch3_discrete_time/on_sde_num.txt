@@ -16,5 +16,27 @@ Since it does not perform so well, further numerical methods are justified.
 
 
 WEAK CONVERGENCE
+In this case we are NOT interested in the specific value of X_T,
+i.e. the true solution at time T, but rather in its probabilistic distribution.
+We care about the probability distribution of X_T, in particular
+about estimating its moments.
+
+Therefore we have weak convergence of order p iff:
+| E(g(X_T)) - E(g(X_TRUE))| <= C h^p
+where g is a class of functions which includes polynomials
+(polynomials are needed to estimate the momentum).
+
+SUMMING UP:
+If we want the VALUE X_T, go for strong convergence.
+If we want the DISTRUBUTION of some functional of interest E[g(X_T)]
+    go for the weak convergence.
+Euler converges typically 1 for weak, 0.5 for strong.
+According to the case, one numerical schemre might me more appropriate
+    than another.
+
+
+Do not forget about stability, the property of controlling the error propagation
+    at every step thanks mainly to Lipschitzianity.
+
 
 
