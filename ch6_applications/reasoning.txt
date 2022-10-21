@@ -1,0 +1,16 @@
+Here we want to discuss some simulations of synamical stochasti systems
+with the idea of trying to find interesting examples whose applications
+can be successfully combined with the signature.
+
+The Neural/B oscilattors are interesting since we can see the noise
+    causing a switching of attractors;
+    can I use the signature maybe to PREDICT when for a system it will
+        be the case? Or does the singature say something?
+
+The OU process is interesting because it is governed by a single parameter
+    alpha and we have a likelihood estimator for alpha,
+    so maybe we can do some regression and compare performances
+    with signature methods.
+
+Finally the stochastic volatility models are opportunities for forther
+    more realistic applications.
